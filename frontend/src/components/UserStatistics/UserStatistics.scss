@@ -1,0 +1,150 @@
+@import "../../variables.scss";
+
+.user-statistics__header {
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.user-statistics__table {
+  margin-top: 1rem;
+  width: 100%;
+  border-collapse: collapse;
+  border-radius: 10px;
+  overflow: hidden;
+
+  th {
+    background: $primary-color;
+    color: #fff;
+    height: 3rem;
+
+    div {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+    }
+  }
+
+  td,
+  th {
+    vertical-align: top;
+    padding: 0 0.5rem;
+    border-right: 1px solid #fff;
+
+    &:last-child {
+      border-right: 0;
+    }
+  }
+
+  tbody {
+    tr {
+      div {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 2rem;
+      }
+
+      &:nth-child(even) {
+        background: $secondary-color;
+      }
+      &:nth-child(odd) {
+        background: #fbfbfb;
+      }
+    }
+  }
+
+  @media (max-width: 991px) {
+    thead {
+      display: none;
+    }
+
+    tr,
+    td {
+      display: block;
+      width: 100%;
+    }
+
+    td {
+      padding-left: 35%;
+      position: relative;
+      border-bottom: 1px dashed #ccc;
+
+      div {
+        justify-content: start !important;
+      }
+
+      &::before {
+        content: attr(data-label);
+        display: flex;
+        align-items: center;
+        height: 100%;
+        position: absolute;
+        left: 0;
+        width: 35%;
+        font-weight: bold;
+      }
+    }
+  }
+
+  @media (max-width: 450px) {
+    font-size: 0.7rem;
+  }
+}
+
+.user-statistics__table-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 1.5rem 0;
+
+  .user-statistics__previous-page,
+  .user-statistics__next-page {
+    cursor: pointer;
+    width: 24px;
+    height: 24px;
+    border-top: 4px solid $primary-color;
+  }
+
+  .user-statistics__previous-page {
+    border-left: 4px solid $primary-color;
+    transform: rotate(-45deg);
+  }
+
+  .user-statistics__next-page {
+    border-right: 4px solid $primary-color;
+    transform: rotate(45deg);
+  }
+
+  .user-statistics__previous-page_inactive,
+  .user-statistics__next-page_inactive {
+    border-color: $secondary-color;
+    cursor: default;
+  }
+
+  .user-statistics__page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 0.25rem;
+    width: 3rem;
+    height: 3rem;
+    border-radius: 10px;
+    border: 2px solid $secondary-color;
+    cursor: pointer;
+    transition: 0.2s;
+
+    &:hover {
+      border: 0;
+      background: $primary-color;
+      color: #fff;
+    }
+  }
+
+  .user-statistics__page_current {
+    border: 0;
+    background: $primary-color;
+    color: #fff;
+    cursor: default;
+  }
+}

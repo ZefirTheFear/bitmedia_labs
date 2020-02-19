@@ -1,0 +1,8 @@
+@import "./variables.scss";
+
+.app__inner {
+  width: 95%;
+  max-width: $app-width;
+  margin: 0 auto;
+  min-height: calc(100vh - #{$header-height} - #{$footer-height} - #{$nav-margin-top});
+}

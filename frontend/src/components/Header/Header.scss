@@ -1,0 +1,18 @@
+@import "../../variables.scss";
+
+.header {
+  width: 100%;
+  height: $header-height;
+  background: $primary-color;
+}
+
+.header__inner {
+  display: flex;
+  align-items: center;
+  margin: 0 auto;
+  width: 95%;
+  max-width: $app-width;
+  height: 100%;
+  font-size: 2.5rem;
+  color: $header-color;
+}

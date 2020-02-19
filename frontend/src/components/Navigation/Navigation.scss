@@ -1,0 +1,23 @@
+@import "../../variables.scss";
+
+.navigation {
+  color: #ccc;
+  margin: $nav-margin-top 0 24px 0;
+}
+
+.navigation__link {
+  color: #ccc;
+  text-decoration: none;
+
+  &:hover {
+    color: $primary-color;
+  }
+}
+.navigation__link_active {
+  color: $primary-color;
+  cursor: default;
+}
+
+.navigation__separator {
+  margin: 0 8px;
+}
