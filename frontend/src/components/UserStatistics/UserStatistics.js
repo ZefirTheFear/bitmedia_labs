@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { withRouter } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 
 import "./UserStatistics.scss";
 
@@ -24,6 +24,7 @@ const UserStatistics = props => {
   const [isPreviousPageActive, setIsPreviousPageActive] = useState(false);
   const [isNextPageActive, setIsNextPageActive] = useState(true);
   const [firstPageFromSelector, setFirstPageFromSelector] = useState(1);
+  const [isRedirecting, setIsRedirecting] = useState(false);
 
   useEffect(() => {
     if (currentPage === 1) {
@@ -41,7 +42,7 @@ const UserStatistics = props => {
 
   const fetchUsers = async () => {
     try {
-      setIsLoading(true);
+      // setIsLoading(true);
       const response = await fetch(
         `http://localhost:3001/users?page=${currentPage}&amount=${usersPerPage}`
       );
@@ -58,7 +59,9 @@ const UserStatistics = props => {
     if (currentPage === 1) {
       return;
     }
-    setFirstPageFromSelector(firstPageFromSelector - 1);
+    if (firstPageFromSelector > 1) {
+      setFirstPageFromSelector(firstPageFromSelector - 1);
+    }
     setCurrentPage(currentPage - 1);
   };
 
@@ -66,7 +69,9 @@ const UserStatistics = props => {
     if (currentPage === lastPage) {
       return;
     }
-    setFirstPageFromSelector(firstPageFromSelector + 1);
+    if (firstPageFromSelector + 3 <= lastPage) {
+      setFirstPageFromSelector(firstPageFromSelector + 1);
+    }
     setCurrentPage(currentPage + 1);
   };
 
@@ -74,8 +79,14 @@ const UserStatistics = props => {
     setCurrentPage(page);
   };
 
+  const redirect = userId => {
+    setIsRedirecting(userId);
+  };
+
   return isLoading ? (
     <div>Loading...</div>
+  ) : isRedirecting ? (
+    <Redirect to={`/users/${isRedirecting}`} />
   ) : (
     <section className="user-statistics">
       <h1 className="user-statistics__header">User statistics</h1>
@@ -90,9 +101,10 @@ const UserStatistics = props => {
           </tr>
         </thead>
         <tbody>
-          {users.map((user, index) => {
+          {users.map(user => {
             return (
-              <tr key={user.id}>
+              // <Link to={`/users/${user.id}`} key={user.id}>
+              <tr key={user.id} onClick={() => redirect(user.id)}>
                 <td data-label="Id">
                   <div>{user.id}</div>
                 </td>
@@ -118,6 +130,7 @@ const UserStatistics = props => {
                   <div>{user.total_page_views}</div>
                 </td>
               </tr>
+              // </Link>
             );
           })}
         </tbody>
@@ -139,28 +152,24 @@ const UserStatistics = props => {
         >
           {firstPageFromSelector}
         </div>
-        {firstPageFromSelector + 1 <= lastPage ? (
-          <div
-            className={
-              "user-statistics__page" +
-              (firstPageFromSelector + 1 === currentPage ? " user-statistics__page_current" : "")
-            }
-            onClick={() => setPage(firstPageFromSelector + 1)}
-          >
-            {firstPageFromSelector + 1}
-          </div>
-        ) : null}
-        {firstPageFromSelector + 2 <= lastPage ? (
-          <div
-            className={
-              "user-statistics__page" +
-              (firstPageFromSelector + 2 === currentPage ? " user-statistics__page_current" : "")
-            }
-            onClick={() => setPage(firstPageFromSelector + 2)}
-          >
-            {firstPageFromSelector + 2}
-          </div>
-        ) : null}
+        <div
+          className={
+            "user-statistics__page" +
+            (firstPageFromSelector + 1 === currentPage ? " user-statistics__page_current" : "")
+          }
+          onClick={() => setPage(firstPageFromSelector + 1)}
+        >
+          {firstPageFromSelector + 1}
+        </div>
+        <div
+          className={
+            "user-statistics__page" +
+            (firstPageFromSelector + 2 === currentPage ? " user-statistics__page_current" : "")
+          }
+          onClick={() => setPage(firstPageFromSelector + 2)}
+        >
+          {firstPageFromSelector + 2}
+        </div>
         <div
           className={
             "user-statistics__next-page" +
@@ -173,4 +182,4 @@ const UserStatistics = props => {
   );
 };
 
-export default withRouter(UserStatistics);
+export default UserStatistics;
