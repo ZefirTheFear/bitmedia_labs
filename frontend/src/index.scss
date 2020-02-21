@@ -1,5 +1,7 @@
 @import url("https://fonts.googleapis.com/css?family=Montserrat&display=swap");
 
+@import "./_variables.scss";
+
 * {
   margin: 0;
   padding: 0;
@@ -10,4 +12,12 @@ body {
   font-family: "Montserrat", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  color: $app-black;
+  font-size: 16px;
+}
+
+button,
+input {
+  font-size: 16px;
+  font-family: "Montserrat", sans-serif;
 }

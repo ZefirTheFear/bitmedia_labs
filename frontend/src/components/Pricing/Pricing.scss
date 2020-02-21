@@ -1,0 +1,124 @@
+@import "../../_variables.scss";
+
+.pricing {
+  padding: 21px 0 10px 0;
+  background: url("../../assets/images/pricing-bg.svg") no-repeat center right;
+  background-size: contain;
+}
+
+.pricing__inner {
+  width: 95%;
+  max-width: $app-width;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.pricing__heading,
+.pricing__subheading {
+  font-size: 32px;
+  line-height: 39px;
+  text-align: center;
+}
+
+.pricing__heading {
+  font-weight: bold;
+}
+
+.pricing__paragraph {
+  margin: 24px 0 32px 0;
+  font-size: 20px;
+  line-height: 1.42;
+  max-width: 650px;
+  text-align: center;
+  color: $app-grey;
+}
+
+.pricing__plans {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 32px;
+
+  @media (max-width: 991px) {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+.pricing__plans-item {
+  max-width: 380px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 32px 40px;
+  border: 2px solid $secondary-color;
+  border-radius: 32px;
+  background: #fff;
+
+  h5 {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 19px;
+  }
+
+  h6 {
+    font-size: 48px;
+    margin-bottom: 24px;
+    font-weight: bold;
+    line-height: 100px;
+    text-align: center;
+
+    &::after {
+      content: " ";
+      display: block;
+      width: 200px;
+      height: 2px;
+      background: radial-gradient(rgb(212, 212, 212), #fff);
+    }
+  }
+
+  p {
+    color: $app-grey;
+    line-height: 1.62;
+    text-align: center;
+  }
+
+  button {
+    width: 220px;
+    height: 56px;
+    margin-top: 24px;
+    outline: 0;
+    border: 0;
+    background: $primary-color;
+    color: #fff;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+
+  &:hover {
+    box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.16);
+
+    h6 {
+      color: $primary-color;
+      font-size: 56px;
+    }
+  }
+
+  @media (max-width: 991px) {
+    margin-bottom: 1rem;
+  }
+}
+
+.pricing__contact-us {
+  color: $app-grey;
+  font-size: 20px;
+  line-height: 1.42;
+  text-align: center;
+
+  span {
+    color: $primary-color;
+    font-weight: bold;
+  }
+}

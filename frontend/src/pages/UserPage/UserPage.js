@@ -4,7 +4,9 @@ import DatePicker from "react-datepicker";
 
 import "react-datepicker/dist/react-datepicker.css";
 
+import Header from "../../components/Header/Header";
 import Navigation from "../../components/Navigation/Navigation";
+import Footer from "../../components/Footer/Footer";
 
 import variables from "../../_variables.scss";
 import "./UserPage.scss";
@@ -170,44 +172,48 @@ const UserPage = props => {
   return isLoading ? (
     <div>Loading...</div>
   ) : (
-    <div className="user-page">
-      <Navigation
-        list={[
-          { title: "Main page", path: "/", isActive: false },
-          { title: "User statistics", path: "/users", isActive: false },
-          {
-            title: `${user.first_name} ${user.last_name}`,
-            path: `/users/${user.id}`,
-            isActive: true
-          }
-        ]}
-      />
-      <h1 className="user-page__header">{`${user.first_name} ${user.last_name}`}</h1>
-      <section className="user-page__date-picker-section">
-        <div className="user-page__date-picker-from">
-          <span>from</span>
-          <DatePicker
-            className="user-page__date-picker"
-            dateFormat="dd/MM/yyyy"
-            selected={new Date(fromDate)}
-            onChange={changeFromDate}
-          />
+    <>
+      <Header />
+      <section className="user-page">
+        <Navigation
+          list={[
+            { title: "Main page", path: "/", isActive: false },
+            { title: "User statistics", path: "/users", isActive: false },
+            {
+              title: `${user.first_name} ${user.last_name}`,
+              path: `/users/${user.id}`,
+              isActive: true
+            }
+          ]}
+        />
+        <h1 className="user-page__header">{`${user.first_name} ${user.last_name}`}</h1>
+        <div className="user-page__date-picker-section">
+          <div className="user-page__date-picker-from">
+            <span>from</span>
+            <DatePicker
+              className="user-page__date-picker"
+              dateFormat="dd/MM/yyyy"
+              selected={new Date(fromDate)}
+              onChange={changeFromDate}
+            />
+          </div>
+          <div className="user-page__date-picker-to">
+            <span>to</span>
+            <DatePicker
+              className="user-page__date-picker"
+              dateFormat="dd/MM/yyyy"
+              selected={new Date(toDate)}
+              onChange={changeToDate}
+            />
+          </div>
         </div>
-        <div className="user-page__date-picker-to">
-          <span>to</span>
-          <DatePicker
-            className="user-page__date-picker"
-            dateFormat="dd/MM/yyyy"
-            selected={new Date(toDate)}
-            onChange={changeToDate}
-          />
-        </div>
+        <h6 className="user-page__clicks">Clicks</h6>
+        <Line data={clicksData} options={options} height={diagramHeight} />
+        <h6 className="user-page__views">Views</h6>
+        <Line data={viewsData} options={options} height={diagramHeight} />
       </section>
-      <h6 className="user-page__clicks">Clicks</h6>
-      <Line data={clicksData} options={options} height={diagramHeight} />
-      <h6 className="user-page__views">Views</h6>
-      <Line data={viewsData} options={options} height={diagramHeight} />
-    </div>
+      <Footer />
+    </>
   );
 };
 
