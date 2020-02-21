@@ -31,7 +31,6 @@ exports.getUsersStatistics = async (req, res) => {
     };
     setTimeout(asyncWork);
   } catch (error) {
-    console.log(error);
     return res.status(503).json({ error: "oops. something went wrong" });
   }
 };
