@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { withRouter } from "react-router-dom";
 
+import Spinner from "../Spinner/Spinner";
+import Modal from "../Modal/Modal";
+
 import "./UserStatistics.scss";
 
 const UserStatistics = props => {
@@ -18,6 +21,8 @@ const UserStatistics = props => {
   const usersPerPage = 15;
 
   const [isLoading, setIsLoading] = useState(true);
+  const [isError, setIsError] = useState(false);
+
   const [users, setUsers] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [lastPage, setLastPage] = useState(null);
@@ -41,12 +46,14 @@ const UserStatistics = props => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        // setIsLoading(true);
+        setIsLoading(true);
         const response = await fetch(
           `http://localhost:3001/users?page=${currentPage}&amount=${usersPerPage}`
         );
+        if (response.status !== 200) {
+          return setIsError(true);
+        }
         const resData = await response.json();
-        console.log(resData);
         setUsers(resData.users);
 
         checkPage(currentPage, Math.ceil(resData.totalAmount / usersPerPage));
@@ -54,7 +61,7 @@ const UserStatistics = props => {
         setLastPage(Math.ceil(resData.totalAmount / usersPerPage));
         setIsLoading(false);
       } catch (error) {
-        console.log(error);
+        return setIsError(true);
       }
     };
 
@@ -85,8 +92,14 @@ const UserStatistics = props => {
     setCurrentPage(page);
   };
 
-  return isLoading ? (
-    <div>Loading...</div>
+  const closeModal = () => {
+    setIsError(false);
+  };
+
+  return isError ? (
+    <Modal closeModal={closeModal} text="something went wrong. try again later" />
+  ) : isLoading ? (
+    <Spinner />
   ) : (
     <section className="user-statistics">
       <h1 className="user-statistics__header">User statistics</h1>

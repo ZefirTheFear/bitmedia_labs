@@ -11,12 +11,7 @@ const UserListPage = () => {
     <>
       <Header />
       <Wrapper>
-        <Navigation
-          list={[
-            { title: "Main page", path: "/", isActive: false },
-            { title: "User statistics", path: "/users", isActive: true }
-          ]}
-        />
+        <Navigation list={[{ title: "Main page", path: "/" }, { title: "User statistics" }]} />
         <UserStatistics />
       </Wrapper>
       <Footer />

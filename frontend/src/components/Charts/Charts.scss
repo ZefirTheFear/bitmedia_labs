@@ -1,29 +1,34 @@
 @import "../../variables.scss";
 
-.user-page__header,
-.user-page__clicks,
-.user-page__views {
+.charts__header,
+.charts__clicks,
+.charts__views {
   font-size: 24px;
   font-weight: bold;
   margin-bottom: 24px;
 }
 
-.user-page__views {
+.charts__views {
   margin-top: 32px;
 }
 
-.user-page__header {
+.charts__header {
   font-size: 2rem !important;
 }
 
-.user-page__date-picker-section {
+.charts__date-picker-section {
   display: flex;
   justify-content: center;
   margin-bottom: 1rem;
+
+  @media (max-width: 991px) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 }
 
-.user-page__date-picker-from,
-.user-page__date-picker-to {
+.charts__date-picker-from,
+.charts__date-picker-to {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -33,11 +38,15 @@
   }
 }
 
-.user-page__date-picker-from {
+.charts__date-picker-from {
   margin-right: 2rem;
+
+  @media (max-width: 991px) {
+    margin: 0 0 1rem 0;
+  }
 }
 
-.user-page__date-picker {
+.charts__date-picker {
   cursor: pointer;
   padding: 3px;
   font-family: "Montserrat", sans-serif;
