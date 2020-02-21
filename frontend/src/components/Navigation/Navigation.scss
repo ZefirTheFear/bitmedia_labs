@@ -5,6 +5,17 @@
   margin-bottom: 24px;
 }
 
+.navigation__item {
+  @media (max-width: 991px) {
+    display: block;
+  }
+}
+
+.navigation__item_active {
+  color: $primary-color;
+  cursor: default;
+}
+
 .navigation__link {
   color: #ccc;
   text-decoration: none;
@@ -12,10 +23,6 @@
   &:hover {
     color: $primary-color;
   }
-}
-.navigation__link_active {
-  color: $primary-color;
-  cursor: default;
 }
 
 .navigation__separator {

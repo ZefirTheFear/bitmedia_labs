@@ -1,15 +1,10 @@
-import React, { useState, useEffect } from "react";
-import { Line } from "react-chartjs-2";
-import DatePicker from "react-datepicker";
-
-import "react-datepicker/dist/react-datepicker.css";
+import React, { useState, useEffect, useCallback } from "react";
 
 import Header from "../../components/Header/Header";
+import Wrapper from "../../components/Wrapper/Wrapper";
 import Navigation from "../../components/Navigation/Navigation";
+import Charts from "../../components/Charts/Charts";
 import Footer from "../../components/Footer/Footer";
-
-import variables from "../../_variables.scss";
-import "./UserPage.scss";
 
 const UserPage = props => {
   const addDay = date => {
@@ -38,89 +33,22 @@ const UserPage = props => {
   const [newDatesArray, setNewDatesArray] = useState(arrayFromDateRange(fromDate, toDate));
   const [clicksDataArray, setClicksDataArray] = useState([]);
   const [viewsDataArray, setViewsDataArray] = useState([]);
-  const [diagramHeight, setDiagramHeight] = useState(null);
 
-  const clicksData = {
-    labels: newDatesArray,
-    datasets: [
-      {
-        fill: false,
-        borderColor: variables.primaryColor,
-        data: clicksDataArray
-      }
-    ]
-  };
-
-  const viewsData = {
-    labels: newDatesArray,
-    datasets: [
-      {
-        fill: false,
-        borderColor: variables.primaryColor,
-        data: viewsDataArray
-      }
-    ]
-  };
-
-  const options = {
-    scales: {
-      yAxes: [
-        {
-          ticks: {
-            beginAtZero: true
-            // steps: 10,
-            // stepValue: 5,
-            // max: 100
-          }
+  const fetchUser = useCallback(async () => {
+    const objToArr = obj => {
+      const arr = [];
+      newDatesArray.forEach(date => {
+        let amount;
+        if (obj.hasOwnProperty(date)) {
+          amount = obj[date];
+        } else {
+          amount = 0;
         }
-      ]
-    },
-    legend: {
-      display: false
-    },
-    tooltips: {
-      enabled: true
-      // enabled: false
-      // callbacks: {
-      //   label: function(tooltipItem) {
-      //     console.log(tooltipItem);
-      //     return tooltipItem.yLabel;
-      //   }
-      // }
-    },
-    elements: {
-      point: {
-        radius: 0
-      }
-    }
-    // maintainAspectRatio: false,
-    // responsive: false
-    // width: "400",
-    // height: "400"
-  };
+        arr.push(amount);
+      });
+      return arr;
+    };
 
-  useEffect(() => {
-    if (window.innerWidth > 1180) {
-      setDiagramHeight(60);
-    } else if (window.innerWidth > 766 && window.innerWidth < 1181) {
-      setDiagramHeight(80);
-    } else if (window.innerWidth > 450 && window.innerWidth < 767) {
-      setDiagramHeight(100);
-    } else if (window.innerWidth < 450) {
-      setDiagramHeight(170);
-    }
-    fetchUser();
-  }, []);
-
-  useEffect(() => {
-    setNewDatesArray(arrayFromDateRange(fromDate, toDate));
-  }, [fromDate, toDate]);
-
-  useEffect(() => {
-    fetchUser();
-  }, [newDatesArray]);
-
-  const fetchUser = async () => {
     try {
       // setIsLoading(true);
       const response = await fetch(
@@ -135,21 +63,11 @@ const UserPage = props => {
     } catch (error) {
       console.log(error);
     }
-  };
+  }, [fromDate, toDate, props.match.params.userId, newDatesArray]);
 
-  const objToArr = obj => {
-    const arr = [];
-    newDatesArray.forEach(date => {
-      let amount;
-      if (obj.hasOwnProperty(date)) {
-        amount = obj[date];
-      } else {
-        amount = 0;
-      }
-      arr.push(amount);
-    });
-    return arr;
-  };
+  useEffect(() => {
+    fetchUser();
+  }, [fetchUser]);
 
   const dateToString = date => {
     let newDate = new Date(date);
@@ -163,10 +81,12 @@ const UserPage = props => {
 
   const changeFromDate = date => {
     setFromDate(dateToString(date));
+    setNewDatesArray(arrayFromDateRange(dateToString(date), toDate));
   };
 
   const changeToDate = date => {
     setToDate(dateToString(date));
+    setNewDatesArray(arrayFromDateRange(fromDate, dateToString(date)));
   };
 
   return isLoading ? (
@@ -174,7 +94,7 @@ const UserPage = props => {
   ) : (
     <>
       <Header />
-      <section className="user-page">
+      <Wrapper>
         <Navigation
           list={[
             { title: "Main page", path: "/", isActive: false },
@@ -186,32 +106,17 @@ const UserPage = props => {
             }
           ]}
         />
-        <h1 className="user-page__header">{`${user.first_name} ${user.last_name}`}</h1>
-        <div className="user-page__date-picker-section">
-          <div className="user-page__date-picker-from">
-            <span>from</span>
-            <DatePicker
-              className="user-page__date-picker"
-              dateFormat="dd/MM/yyyy"
-              selected={new Date(fromDate)}
-              onChange={changeFromDate}
-            />
-          </div>
-          <div className="user-page__date-picker-to">
-            <span>to</span>
-            <DatePicker
-              className="user-page__date-picker"
-              dateFormat="dd/MM/yyyy"
-              selected={new Date(toDate)}
-              onChange={changeToDate}
-            />
-          </div>
-        </div>
-        <h6 className="user-page__clicks">Clicks</h6>
-        <Line data={clicksData} options={options} height={diagramHeight} />
-        <h6 className="user-page__views">Views</h6>
-        <Line data={viewsData} options={options} height={diagramHeight} />
-      </section>
+        <Charts
+          user={user}
+          fromDate={fromDate}
+          toDate={toDate}
+          changeFromDate={changeFromDate}
+          changeToDate={changeToDate}
+          newDatesArray={newDatesArray}
+          clicksDataArray={clicksDataArray}
+          viewsDataArray={viewsDataArray}
+        />
+      </Wrapper>
       <Footer />
     </>
   );

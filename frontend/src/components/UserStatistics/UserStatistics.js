@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Redirect } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 
 import "./UserStatistics.scss";
 
@@ -24,36 +24,42 @@ const UserStatistics = props => {
   const [isPreviousPageActive, setIsPreviousPageActive] = useState(false);
   const [isNextPageActive, setIsNextPageActive] = useState(true);
   const [firstPageFromSelector, setFirstPageFromSelector] = useState(1);
-  const [isRedirecting, setIsRedirecting] = useState(false);
 
-  useEffect(() => {
-    if (currentPage === 1) {
+  const checkPage = (cPage, lPage) => {
+    if (cPage === 1) {
       setIsPreviousPageActive(false);
     } else {
       setIsPreviousPageActive(true);
     }
-    if (currentPage === lastPage) {
+    if (cPage === lPage) {
       setIsNextPageActive(false);
     } else {
       setIsNextPageActive(true);
     }
+  };
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        // setIsLoading(true);
+        const response = await fetch(
+          `http://localhost:3001/users?page=${currentPage}&amount=${usersPerPage}`
+        );
+        const resData = await response.json();
+        console.log(resData);
+        setUsers(resData.users);
+
+        checkPage(currentPage, Math.ceil(resData.totalAmount / usersPerPage));
+
+        setLastPage(Math.ceil(resData.totalAmount / usersPerPage));
+        setIsLoading(false);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
     fetchUsers();
   }, [currentPage]);
-
-  const fetchUsers = async () => {
-    try {
-      // setIsLoading(true);
-      const response = await fetch(
-        `http://localhost:3001/users?page=${currentPage}&amount=${usersPerPage}`
-      );
-      const resData = await response.json();
-      setUsers(resData.users);
-      setLastPage(Math.ceil(resData.totalAmount / usersPerPage));
-      setIsLoading(false);
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   const previousPage = () => {
     if (currentPage === 1) {
@@ -79,14 +85,8 @@ const UserStatistics = props => {
     setCurrentPage(page);
   };
 
-  const redirect = userId => {
-    setIsRedirecting(userId);
-  };
-
   return isLoading ? (
     <div>Loading...</div>
-  ) : isRedirecting ? (
-    <Redirect to={`/users/${isRedirecting}`} />
   ) : (
     <section className="user-statistics">
       <h1 className="user-statistics__header">User statistics</h1>
@@ -103,8 +103,7 @@ const UserStatistics = props => {
         <tbody>
           {users.map(user => {
             return (
-              // <Link to={`/users/${user.id}`} key={user.id}>
-              <tr key={user.id} onClick={() => redirect(user.id)}>
+              <tr key={user.id} onClick={() => props.history.push(`/users/${user.id}`)}>
                 <td data-label="Id">
                   <div>{user.id}</div>
                 </td>
@@ -130,7 +129,6 @@ const UserStatistics = props => {
                   <div>{user.total_page_views}</div>
                 </td>
               </tr>
-              // </Link>
             );
           })}
         </tbody>
@@ -182,4 +180,4 @@ const UserStatistics = props => {
   );
 };
 
-export default UserStatistics;
+export default withRouter(UserStatistics);

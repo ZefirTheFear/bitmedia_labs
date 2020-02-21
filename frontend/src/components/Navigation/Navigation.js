@@ -7,17 +7,20 @@ import "./Navigation.scss";
 const Navigation = props => {
   return (
     <div className="navigation">
-      {props.list.map((item, index, arr) => (
-        <span key={item.title}>
-          <Link
-            to={item.path}
-            className={"navigation__link" + (item.isActive ? " navigation__link_active" : "")}
-          >
+      {props.list.map((item, index, arr) =>
+        index !== arr.length - 1 ? (
+          <span key={item.title} className="navigation__item">
+            <Link to={item.path} className="navigation__link">
+              {item.title}
+            </Link>
+            <span className="navigation__separator">&gt;</span>
+          </span>
+        ) : (
+          <span key={item.title} className="navigation__item_active">
             {item.title}
-          </Link>
-          {index !== arr.length - 1 ? <span className="navigation__separator">&gt;</span> : null}
-        </span>
-      ))}
+          </span>
+        )
+      )}
     </div>
   );
 };
